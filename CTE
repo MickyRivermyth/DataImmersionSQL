@@ -1,0 +1,22 @@
+This query shows the average CTE
+
+WITH avg_CTE (customer_id, first_name, last_name, country, city, total)
+AS
+    (SELECT
+        A.customer_id,
+        B.first_name,
+        B.last_name,
+        E.country,
+        D.city,
+        SUM (A.amount) AS total
+    FROM payment A
+    INNER JOIN customer B ON A.customer_id = B.customer_id
+    INNER JOIN address C on B.address_id = C.address_id
+    INNER JOIN city D ON C.city_id = D.city_id
+    INNER JOIN country E ON D.country_id = E.country_id
+        WHERE city IN ('Aurora'm 'Acua', 'Citrus Heights', 'Iwaki', 'Ambattur', 'Sharwei', 'So Leopoldo', 'Teboskary', 'Tianjin', 'Cianjur')
+    GROUP BY A.customer_id, B.first_name, B.last_name, E.country, D.city
+    ORDER BY total DESC
+    LIMIT 5)
+SELECT AVG(total)
+FROM avg_CTE
